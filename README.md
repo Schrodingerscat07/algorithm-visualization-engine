@@ -1,26 +1,116 @@
-# Python Tutor Live progamming Mode - Backed by Pyodide
+# AlgoVista — Computational Algorithm Visualization Engine
 
-This project is a modified version of Python tutor live programming mode by @pgbovine and inspired by https://cs320.cs.wisc.edu/pythontutor/live.html#mode=edit in the usage of pyodide.
+A **live, interactive algorithm visualization platform** built as an extension of [Python Tutor](http://pythontutor.com/) by [Philip Guo](https://github.com/pgbovine/OnlinePythonTutor). It combines Python Tutor's powerful step-by-step execution tracing with a real-time graph visualization engine, enabling users to see algorithms like Kruskal's MST come to life as they write Python code.
 
-## Features of Python Tutor
-- Step by step visualization.
-- Visualize different data structures like `list`, `tuple`, `dict` and `set`.
-- Good debugging interface and execution stops at the error.
-- Move back and forth through the execution.
-- Different pointer modes like inline primitives, nested object, render everything in heap
+---
 
-## Live Programming mode
-In the live programming mode the outputs are computed as you type in the code block and change the input.
+## 🙏 Credits & Acknowledgements
 
-## Perks of Pyodide(powered by wasm)
-- Everthing runs on your browser
-- Lower latency and faster execution.
+This project is built on top of and extends the following open-source work:
 
-## Additional features
-- Added support for a input cell for standard input.
-- Modified support for permanent link generation(sharable) - added inputs to be also encoded with the permanent link
+| Project | Author | Role |
+|---|---|---|
+| **[Python Tutor](http://pythontutor.com/)** | **Philip Guo** ([pgbovine](https://github.com/pgbovine/OnlinePythonTutor)) | Original execution visualization framework. The core trace engine (`opt-live.bundle.js`) and step-by-step debugging UI are his work. |
+| **[live-py-tutor](https://github.com/livinNector/live-py-tutor)** | **Livin Nector** ([livinNector](https://github.com/livinNector)) | Pyodide-based live programming mode that runs Python Tutor entirely in the browser. This repo was forked from his implementation. |
 
-## Examples
-- [loops and input](https://livinnector.github.io/live-py-tutor/#code=%0Afor%20i%20in%20range%2810%29%3A%0A%20%20%20%20print%28i,i**2%29%20%23%20try%20changing%20the%20value%20here%0A%20%20%20%20%0A%23%20go%20step%20by%20step%20with%20the%20slider%20or%20control%20buttons%0Atotal%20%3D%200%0Anum%20%3D%20int%28input%28%29%29%0Awhile%20num%20!%3D0%3A%0A%20%20%20%20total%2B%3Dnum%0A%20%20%20%20num%20%3D%20int%28input%28%29%29%0Aprint%28%22Total%22,total%29&cumulative=false&curInstr=37&heapPrimitives=nevernest&mode=edit&origin=opt-live.js&py=3&rawInputLstJSON=%5B%223%22,%224%22,%225%22,%226%22,%220%22%5D&textReferences=false)
-- [collections](https://livinnector.github.io/live-py-tutor/#code=fruits%20%3D%20%5B%22apple%22,%22orange%22,%20%22mango%22,%20%22banana%22%5D%0Afor%20i%20in%20range%28len%28fruits%29%29%3A%0A%20%20%20%20fruits%5Bi%5D%20%3D%20fruits%5Bi%5D.title%28%29%0A%0An%20%3D%20int%28input%28%29%29%0Afor%20i%20in%20range%28n%29%3A%0A%20%20%20%20fruits.append%28input%28%29%29%0A%0Afruit_chars%20%3D%20%7Bchar%20for%20fruit%20in%20fruits%20for%20char%20in%20fruit%20%7D%0Afruit_chars_lower%20%3D%20%7Bchar.lower%28%29%20for%20fruit%20in%20fruits%20for%20char%20in%20fruit%20%7D%0A%0Afruit_char_lens%20%3D%20%7B%7D%0Afor%20fruit%20in%20fruits%3A%0A%20%20%20%20fruit_char_lens%5Bfruit%5D%20%3D%20len%28fruit%29&cumulative=false&curInstr=132&heapPrimitives=nevernest&mode=edit&origin=opt-live.js&py=3&rawInputLstJSON=%5B%223%22,%22Kiwi%22,%22Grapes%22,%22Cherry%22,%22%22%5D&textReferences=false)
-- [recursion](https://livinnector.github.io/live-py-tutor/#code=def%20factorial%28n%29%3A%0A%20%20%20%20if%20n%20%3C%3D1%3A%0A%20%20%20%20%20%20%20%20return%201%0A%20%20%20%20return%20n*factorial%28n-1%29%0A%20%20%20%20%0Aanswer%20%3D%20factorial%2810%29&cumulative=false&curInstr=42&heapPrimitives=nevernest&mode=edit&origin=opt-live.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false)
+> **This application would not exist without the foundational work of Python Tutor.** AlgoVista adds an algorithm visualization layer on top of it — all credit for the execution tracing, frame/object rendering, and live programming infrastructure belongs to the original authors above.
+
+---
+
+## ✨ What AlgoVista Adds
+
+While Python Tutor shows you *how your code executes*, AlgoVista shows you *what your algorithm is doing* — visually, in real-time.
+
+### Key Features
+- **📊 Live Graph Visualization** — Write edge lists in Python, see the graph rendered on a canvas instantly
+- **🔗 Variable Mapping** — Map your Python variables (`edges`, `mst`, `parent`) to visualization components via dropdowns
+- **⬡ Algorithm Plugins** — Modular architecture: each algorithm (Kruskal's MST, etc.) is a separate JS file
+- **↔️ Resizable Dual-Pane Layout** — Drag the splitter to resize the Data State and Algorithm Visualization panels
+- **🔍 OPT Heap Decoder** — Recursively decodes Python Tutor's trace format (`REF`, `LIST`, `TUPLE`, `DICT`) into real JavaScript values for accurate variable detection
+- **🎨 Clean White Theme** — Professional, industry-grade UI design
+
+### Inherited from Python Tutor
+- Step-by-step execution visualization
+- Frame & object rendering (lists, tuples, dicts, sets)
+- Pointer arrows between frames and heap objects
+- Slider and VCR controls for stepping through execution
+- Live programming mode (code runs as you type)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.x (for the local dev server)
+
+### Run Locally
+```bash
+# Clone the repository
+git clone https://github.com/Schrodingerscat07/computational-algorithm-visualization-engine.git
+cd computational-algorithm-visualization-engine
+
+# Start the server
+python run.py
+```
+
+Open your browser to `http://localhost:8003` (or the port shown in the terminal).
+
+### Try It Out
+Paste this code into the editor:
+```python
+edges = [(0,1,4),(0,2,3),(1,2,1),(1,3,2),(2,3,5),(3,4,6)]
+```
+
+1. Select **Kruskal's MST** from the Algorithm dropdown
+2. Map the `edges` variable to **All Edges**
+3. Watch the graph render on the canvas!
+
+---
+
+## 📁 Project Structure
+
+```
+├── index.html          # Main HTML with resizable dual-pane layout
+├── algo-core.js        # Core engine: UI, trace interception, heap decoder, resizer
+├── algo-kruskal.js     # Kruskal's MST visualization plugin
+├── opt-live.bundle.js  # Python Tutor's bundled execution engine (original)
+├── run.py              # Local development server
+├── LICENSE             # MIT License
+└── README.md           # This file
+```
+
+---
+
+## 🧩 Adding New Algorithms
+
+Create a new file (e.g., `algo-dijkstra.js`) and register it:
+
+```javascript
+window.AlgoVista.registerAlgorithm({
+  id: 'dijkstra',
+  name: "Dijkstra's Shortest Path",
+  fields: [
+    { id: 'edges', label: 'Graph Edges [(u,v,w),...]', type: 'graph' },
+    { id: 'dist',  label: 'Distance Array', type: 'list' },
+  ],
+  render(ctx, state, globals) {
+    // Your rendering logic here
+    // Use state.mappings, state.nodePositions, globals
+    // Use AlgoVista.drawNode() and AlgoVista.drawLine()
+  }
+});
+```
+
+Include the script in `index.html` with `defer`:
+```html
+<script type="text/javascript" src="algo-dijkstra.js" defer></script>
+```
+
+---
+
+## 📜 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+**Original Python Tutor** is copyright © Philip Guo, licensed under its [own terms](https://github.com/pgbovine/OnlinePythonTutor/blob/master/LICENSE.txt).  
+**live-py-tutor** is copyright © 2024 Livin Nector, MIT License.

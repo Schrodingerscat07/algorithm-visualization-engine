@@ -3,29 +3,94 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <!--
-  Python Tutor: https://github.com/pgbovine/OnlinePythonTutor/
-  Copyright (C) Philip Guo (philip@pgbovine.net)
-  LICENSE: https://github.com/pgbovine/OnlinePythonTutor/blob/master/LICENSE.txt
+  AlgoVista: Live Programming & Algorithm Visualization Prototype
 -->
 
-<!-- OPT live programming prototype started on 2016-05-30 -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
-      <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 <head>
-  <title>Live Programming Mode - Python Tutor Using pyodide</title>
+  <title>AlgoVista - Live Algorithm Visualizer</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 
   <!-- let Webpack take care of everything. Use the [hash] feature to
        create unique filenames for releases:
        https://webpack.github.io/docs/long-term-caching.html -->
   <script type="text/javascript" src="opt-live.bundle.js" charset="utf-8"></script>
+  <script type="text/javascript" src="algo-core.js" defer></script>
+  <script type="text/javascript" src="algo-kruskal.js" defer></script>
 
   <!-- insert google-analytics.txt contents here -->
 
+  <style>
+    /* ── Resizable Splitter ─────────────────────────────────────── */
+    #aviz-dual-view {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      width: 100%;
+    }
+
+    #aviz-frames-column {
+      min-width: 280px;
+      max-width: 70%;
+      overflow: auto;
+      position: relative;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px 0 0 8px;
+    }
+
+    #aviz-resizer {
+      width: 6px;
+      cursor: col-resize;
+      background: #e0e0e0;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      transition: background 0.15s;
+    }
+
+    #aviz-resizer:hover,
+    #aviz-resizer.dragging {
+      background: #7b8cde;
+    }
+
+    #aviz-algo-column {
+      flex: 1;
+      min-width: 400px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .aviz-panel-header {
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+
+    /* Let PyTutor's jsPlumb arrows render correctly */
+    #aviz-frames-panel {
+      position: relative;
+      /* jsPlumb needs this */
+      padding: 5px;
+    }
+  </style>
 </head>
 
 <body>
-  <p>PythonTutor live programming mode using Pyodide</p>
+  <p style="font-family: sans-serif; font-size: 18px; font-weight: bold; color: #333; margin: 10px 20px;">AlgoVista
+    <span style="font-weight: normal; font-size: 14px; color: #777;">| Live Programming & Algorithm Visualization</span>
+  </p>
   <table>
     <tr>
       <td valign="top">
@@ -60,50 +125,65 @@
           <div id="frontendErrorOutput"></div>
           <details id="rawUserInputDiv">
             <summary><b>User Input (stdin)</b></summary>
-            <textarea type="text" id="raw_input_textbox" style="border: thin solid #ccc;" rows="10" cols="65" value="" ></textarea>
-          </div>
-          
-          
-          <div id="optionsPane">
-            <select id="cumulativeModeSelector">
-              <option value="false">hide exited frames [default]</option>
-              <option value="true">show exited frames (Python)</option>
-              <!-- <option value="holistic">holistic mode (experimental)</option> -->
-            </select> <br>
-            <select id="heapPrimitivesSelector">
-              <option value="false">inline primitives and try to nest objects</option>
-              <option value="nevernest" selected>inline primitives but don't nest objects [default]</option>
-              <option value="true">render all objects on the heap (Python)</option>
-            </select> <br>
-            <select id="textualMemoryLabelsSelector">
-              <option value="false">draw pointers as arrows [default]</option>
-              <option value="true">use text labels for pointers</option>
-            </select>
-          </div>
+            <textarea type="text" id="raw_input_textbox" style="border: thin solid #ccc;" rows="10" cols="65"
+              value=""></textarea>
+        </div>
 
-          
+
+        <div id="optionsPane">
+          <select id="cumulativeModeSelector">
+            <option value="false">hide exited frames [default]</option>
+            <option value="true">show exited frames (Python)</option>
+            <!-- <option value="holistic">holistic mode (experimental)</option> -->
+          </select> <br>
+          <select id="heapPrimitivesSelector">
+            <option value="false">inline primitives and try to nest objects</option>
+            <option value="nevernest" selected>inline primitives but don't nest objects [default]</option>
+            <option value="true">render all objects on the heap (Python)</option>
+          </select> <br>
+          <select id="textualMemoryLabelsSelector">
+            <option value="false">draw pointers as arrows [default]</option>
+            <option value="true">use text labels for pointers</option>
+          </select>
+        </div>
+
+
         </div>
       </td>
-      <td valign="top">
-        <div id="pyOutputPane" />
+      <td valign="top" id="aviz-output-column">
+        <!-- Resizable Side-by-side Dual View -->
+        <div id="aviz-dual-view">
+          <!-- Left: Data State -->
+          <div id="aviz-frames-column" style="width:450px;">
+            <div class="aviz-panel-header">Data State</div>
+            <div id="aviz-frames-panel">
+              <div id="pyOutputPane"></div>
+            </div>
+          </div>
+
+          <!-- Resizer Handle -->
+          <div id="aviz-resizer"></div>
+
+          <!-- Right: Algorithm Visualization -->
+          <div id="aviz-algo-column">
+            <div class="aviz-panel-header">Algorithm Visualization</div>
+            <div id="aviz-algo-panel" style="padding:15px; min-height:600px; box-sizing:border-box;">
+              <!-- Content populated by algo-core.js -->
+            </div>
+          </div>
+        </div>
       </td>
     </tr>
   </table>
 
   <div id="footer">
-
-    
-
     <p>
       <button id="genUrlBtn" class="smallBtn" type="button">Generate permanent link</button> <input type="text"
-        id="urlOutput" size="65" /> 
+        id="urlOutput" size="65" />
     </p>
 
-    <p style="margin-top: 35px;">
-      This is a pyodide based implementation of the live programming mode of
-      <a href="http://pythontutor.com/">Python Tutor</a>. Made with ❤️ by <a href="https://github.com/livinNector/live-py-tutor">Livin Nector</a>
-      
-
+    <p style="margin-top: 35px; color: #999; font-size: 12px;">
+      AlgoVista Prototype | Built for interactive learning and algorithmic insight.
     </p>
   </div>
 
