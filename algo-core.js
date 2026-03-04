@@ -37,7 +37,6 @@
         nodePositions: {},
     };
 
-    // ─── Public API ───────────────────────────────────────────────────────────
     window.AlgoVista = {
         registerAlgorithm(config) {
             State.algorithms[config.id] = config;
@@ -46,6 +45,22 @@
         COLORS: COLOR,
         drawNode,
         drawLine,
+        State,
+        handleTrace(result) {
+            try {
+                if (result && result.trace && Array.isArray(result.trace)) {
+                    State.currentTrace = result.trace;
+                    State.traceIndex = result.trace.length > 0 ? result.trace.length - 1 : 0;
+                    extractGlobalsFromCurrentStep();
+                } else if (result && Array.isArray(result) && result.length > 0 && result[0].ordered_globals) {
+                    State.currentTrace = result;
+                    State.traceIndex = result.length - 1;
+                    extractGlobalsFromCurrentStep();
+                }
+            } catch (e) {
+                console.error("Error in handleTrace", e);
+            }
+        },
     };
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -271,45 +286,27 @@
     // 5. TRACE INTERCEPTION & OPT HEAP DECODER
     // ═══════════════════════════════════════════════════════════════════════════
     function installTraceHook() {
-        // Poll myVisualizer at high frequency
+        // Trace is handled by window.AlgoVista.handleTrace mapped in opt-live.bundle.js
+        // We poll the #curInstr text to keep AlgoVista synced with timeline scrubbing without needing jQuery
         setInterval(() => {
-            if (!window.myVisualizer) return;
-            const viz = window.myVisualizer;
-
-            // Grab the trace if we don't have it yet
-            if (viz.curTrace && viz.curTrace !== State.currentTrace) {
-                State.currentTrace = viz.curTrace;
-                const overlay = document.getElementById('aviz-step-overlay');
-                if (overlay) overlay.textContent = `Trace (${viz.curTrace.length} steps)`;
+            let currentStep = undefined;
+            const curInstrDiv = document.getElementById('curInstr');
+            if (curInstrDiv) {
+                const text = curInstrDiv.textContent || "";
+                const match = text.match(/Step (\d+)/);
+                if (match) {
+                    currentStep = parseInt(match[1], 10) - 1; // 0-indexed
+                }
             }
 
-            // Detect step changes
-            if (viz.curInstr !== undefined && viz.curInstr !== State.traceIndex) {
-                State.traceIndex = viz.curInstr;
-                extractGlobalsFromCurrentStep();
-            }
-        }, 150);
-
-        // Also intercept JSON.parse for the trace payload
-        const origParse = JSON.parse;
-        JSON.parse = function (text, ...args) {
-            const result = origParse.call(this, text, ...args);
-            try {
-                if (result && result.trace && Array.isArray(result.trace)) {
-                    State.currentTrace = result.trace;
-                    State.traceIndex = 0;
-                    extractGlobalsFromCurrentStep();
-                } else if (result && Array.isArray(result) && result.length > 0 && result[0].ordered_globals) {
-                    State.currentTrace = result;
-                    State.traceIndex = 0;
+            if (currentStep !== undefined && currentStep !== State.traceIndex && State.currentTrace) {
+                // Ignore if it's out of bounds of the current trace
+                if (currentStep >= 0 && currentStep < State.currentTrace.length) {
+                    State.traceIndex = currentStep;
                     extractGlobalsFromCurrentStep();
                 }
-            } catch (e) { }
-            return result;
-        };
-
-        // Pyodide polling as last resort
-        setInterval(pollPyodide, 1200);
+            }
+        }, 100);
     }
 
     /**
