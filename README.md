@@ -61,7 +61,7 @@ Paste this code into the editor:
 edges = [(0,1,4),(0,2,3),(1,2,1),(1,3,2),(2,3,5),(3,4,6)]
 ```
 
-1. Select **Kruskal's MST** from the Algorithm dropdown
+1. Select an algorithm (**Kruskal's MST** or **Dijkstra's**) from the Algorithm dropdown
 2. Map the `edges` variable to **All Edges**
 3. Watch the graph render on the canvas!
 
