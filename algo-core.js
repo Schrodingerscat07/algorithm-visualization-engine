@@ -1,6 +1,6 @@
 /**
  * algo-core.js
- * The backbone of the AlgoVista visualization system.
+ * The backbone of the Labyrinth visualization system.
  * Handles UI, Trace Interception w/ OPT Heap Decoding, Resizer, and Algorithm Registration.
  */
 
@@ -37,7 +37,7 @@
         nodePositions: {},
     };
 
-    window.AlgoVista = {
+    window.Labyrinth = {
         registerAlgorithm(config) {
             State.algorithms[config.id] = config;
             updateAlgoDropdown();
@@ -286,8 +286,8 @@
     // 5. TRACE INTERCEPTION & OPT HEAP DECODER
     // ═══════════════════════════════════════════════════════════════════════════
     function installTraceHook() {
-        // Trace is handled by window.AlgoVista.handleTrace mapped in opt-live.bundle.js
-        // We poll the #curInstr text to keep AlgoVista synced with timeline scrubbing without needing jQuery
+        // Trace is handled by window.Labyrinth.handleTrace mapped in opt-live.bundle.js
+        // We poll the #curInstr text to keep Labyrinth synced with timeline scrubbing without needing jQuery
         setInterval(() => {
             let currentStep = undefined;
             const curInstrDiv = document.getElementById('curInstr');

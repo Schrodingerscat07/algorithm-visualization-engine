@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
-    if (!window.AlgoVista) {
-        console.error("AlgoVista core not found. algo-dijkstra.js must be loaded after algo-core.js");
+    if (!window.Labyrinth) {
+        console.error("Labyrinth core not found. algo-dijkstra.js must be loaded after algo-core.js");
         return;
     }
 
-    const { COLORS, drawNode, drawLine } = window.AlgoVista;
+    const { COLORS, drawNode, drawLine } = window.Labyrinth;
 
-    window.AlgoVista.registerAlgorithm({
+    window.Labyrinth.registerAlgorithm({
         id: 'dijkstra',
         name: "Dijkstra's Shortest Path",
         fields: [

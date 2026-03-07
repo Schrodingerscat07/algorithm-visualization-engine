@@ -1,19 +1,19 @@
 /**
  * algo-kruskal.js
- * Kruskal's MST Visualization Plugin for AlgoVista.
+ * Kruskal's MST Visualization Plugin for Labyrinth.
  */
 
 (function () {
     'use strict';
 
-    if (!window.AlgoVista) {
-        console.error("AlgoVista core not found. algo-kruskal.js must be loaded after algo-core.js");
+    if (!window.Labyrinth) {
+        console.error("Labyrinth core not found. algo-kruskal.js must be loaded after algo-core.js");
         return;
     }
 
-    const { COLORS, drawNode, drawLine } = window.AlgoVista;
+    const { COLORS, drawNode, drawLine } = window.Labyrinth;
 
-    window.AlgoVista.registerAlgorithm({
+    window.Labyrinth.registerAlgorithm({
         id: 'kruskal',
         name: "Kruskal's MST",
         fields: [

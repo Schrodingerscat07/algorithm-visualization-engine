@@ -1,4 +1,4 @@
-# AlgoVista — Computational Algorithm Visualization Engine
+# Labyrinth — Computational Algorithm Visualization Engine
 
 A **live, interactive algorithm visualization platform** built as an extension of [Python Tutor](http://pythontutor.com/) by [Philip Guo](https://github.com/pgbovine/OnlinePythonTutor). It combines Python Tutor's powerful step-by-step execution tracing with a real-time graph visualization engine, enabling users to see algorithms like Kruskal's MST come to life as they write Python code.
 
@@ -13,13 +13,13 @@ This project is built on top of and extends the following open-source work:
 | **[Python Tutor](http://pythontutor.com/)** | **Philip Guo** ([pgbovine](https://github.com/pgbovine/OnlinePythonTutor)) | Original execution visualization framework. The core trace engine (`opt-live.bundle.js`) and step-by-step debugging UI are his work. |
 | **[live-py-tutor](https://github.com/livinNector/live-py-tutor)** | **Livin Nector** ([livinNector](https://github.com/livinNector)) | Pyodide-based live programming mode that runs Python Tutor entirely in the browser. This repo was forked from his implementation. |
 
-> **This application would not exist without the foundational work of Python Tutor.** AlgoVista adds an algorithm visualization layer on top of it — all credit for the execution tracing, frame/object rendering, and live programming infrastructure belongs to the original authors above.
+> **This application would not exist without the foundational work of Python Tutor.** Labyrinth adds an algorithm visualization layer on top of it — all credit for the execution tracing, frame/object rendering, and live programming infrastructure belongs to the original authors above.
 
 ---
 
-## ✨ What AlgoVista Adds
+## ✨ What Labyrinth Adds
 
-While Python Tutor shows you *how your code executes*, AlgoVista shows you *what your algorithm is doing* — visually, in real-time.
+While Python Tutor shows you *how your code executes*, Labyrinth shows you *what your algorithm is doing* — visually, in real-time.
 
 ### Key Features
 - **📊 Live Graph Visualization** — Write edge lists in Python, see the graph rendered on a canvas instantly
@@ -46,8 +46,8 @@ While Python Tutor shows you *how your code executes*, AlgoVista shows you *what
 ### Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/Schrodingerscat07/computational-algorithm-visualization-engine.git
-cd computational-algorithm-visualization-engine
+git clone https://github.com/Schrodingerscat07/algorithm-visualization-engine.git
+cd algorithm-visualization-engine
 
 # Start the server
 python run.py
@@ -86,7 +86,7 @@ edges = [(0,1,4),(0,2,3),(1,2,1),(1,3,2),(2,3,5),(3,4,6)]
 Create a new file (e.g., `algo-dijkstra.js`) and register it:
 
 ```javascript
-window.AlgoVista.registerAlgorithm({
+window.Labyrinth.registerAlgorithm({
   id: 'dijkstra',
   name: "Dijkstra's Shortest Path",
   fields: [
@@ -96,7 +96,7 @@ window.AlgoVista.registerAlgorithm({
   render(ctx, state, globals) {
     // Your rendering logic here
     // Use state.mappings, state.nodePositions, globals
-    // Use AlgoVista.drawNode() and AlgoVista.drawLine()
+    // Use Labyrinth.drawNode() and Labyrinth.drawLine()
   }
 });
 ```

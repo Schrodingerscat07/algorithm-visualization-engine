@@ -35,8 +35,8 @@ async function tracePythonExec(code, rawInputLst, backendOptionsObj, callback) {
 	// console.log(backendOptionsObj)
 	// console.log(trace);
 	let parsedJSON = JSON.parse(trace);
-	if (window.AlgoVista && typeof window.AlgoVista.handleTrace === 'function') {
-		window.AlgoVista.handleTrace(parsedJSON);
+	if (window.Labyrinth && typeof window.Labyrinth.handleTrace === 'function') {
+		window.Labyrinth.handleTrace(parsedJSON);
 	}
 	callback(parsedJSON);
 }
