@@ -1,6 +1,15 @@
 # Labyrinth — Computational Algorithm Visualization Engine
 
-A **live, interactive algorithm visualization platform** built as an extension of [Python Tutor](http://pythontutor.com/) by [Philip Guo](https://github.com/pgbovine/OnlinePythonTutor). It combines Python Tutor's powerful step-by-step execution tracing with a real-time graph visualization engine, enabling users to see algorithms like Kruskal's MST come to life as they write Python code.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://schrodingerscat07.github.io/algorithm-visualization-engine/#mode=edit)
+
+A **live, interactive algorithm visualization platform** built as an extension of [Python Tutor](http://pythontutor.com/) by [Philip Guo](https://github.com/pgbovine/OnlinePythonTutor). It combines Python Tutor's powerful step-by-step execution tracing with a real-time graph visualization engine, enabling users to see algorithms like Kruskal's MST and Dijkstra's Shortest Path come to life as they write Python code.
+
+---
+
+## 🌐 Live Demo
+
+Try out Labyrinth instantly in your browser (no installation required):
+**[Launch Algorithm Visualization Engine](https://schrodingerscat07.github.io/algorithm-visualization-engine/#mode=edit)**
 
 ---
 
@@ -73,6 +82,7 @@ edges = [(0,1,4),(0,2,3),(1,2,1),(1,3,2),(2,3,5),(3,4,6)]
 ├── index.html          # Main HTML with resizable dual-pane layout
 ├── algo-core.js        # Core engine: UI, trace interception, heap decoder, resizer
 ├── algo-kruskal.js     # Kruskal's MST visualization plugin
+├── algo-dijkstra.js    # Dijkstra's Shortest Path visualization plugin
 ├── opt-live.bundle.js  # Python Tutor's bundled execution engine (original)
 ├── run.py              # Local development server
 ├── LICENSE             # MIT License
@@ -110,7 +120,9 @@ Include the script in `index.html` with `defer`:
 
 ## 📜 License
 
-MIT License — see [LICENSE](LICENSE) for details.
+**Labyrinth (this project's current iteration)** is copyright © Schrodingerscat07, licensed under the MIT License — see [LICENSE](LICENSE) for details.
 
-**Original Python Tutor** is copyright © Philip Guo, licensed under its [own terms](https://github.com/pgbovine/OnlinePythonTutor/blob/master/LICENSE.txt).  
-**live-py-tutor** is copyright © 2024 Livin Nector, MIT License.
+This project is built upon the foundational work of the following open-source projects:
+
+- **Original Python Tutor** is copyright © Philip Guo, licensed under its [own terms](https://github.com/pgbovine/OnlinePythonTutor/blob/master/LICENSE.txt).  
+- **live-py-tutor** is copyright © 2024 Livin Nector, MIT License.
