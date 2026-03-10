@@ -466,6 +466,13 @@ _json.dumps(_out)
         const edgesVar = State.mappings['edges'];
         if (!edgesVar) return;
 
+        // If the selected algorithm provides a custom layout, use it
+        const algo = State.algorithms[State.selectedAlgo];
+        if (algo && typeof algo.layout === 'function') {
+            algo.layout(State, State.detectedGlobals);
+            return;
+        }
+
         const rawEdges = State.detectedGlobals[edgesVar];
         if (!Array.isArray(rawEdges) || rawEdges.length === 0) return;
 
